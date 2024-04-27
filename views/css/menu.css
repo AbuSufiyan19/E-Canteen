@@ -1,0 +1,186 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,500;0,600;1,100;1,300&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: 0.2s linear;
+  
+}
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+body{
+  background-color: #f9f1ff;
+}
+.heading{
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    
+}
+.packages1 {
+  background-color: #f9f1ff;
+    padding: 7rem;
+    padding-top: 6em;
+  }
+  
+  .packages1 .box-container {
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    position: relative;
+    margin-top: 5rem;
+  }
+  .packages1 .box-container .box .btn,.out-of-stock {
+    position: absolute;
+    bottom: 15px; /* Adjust this value to set the distance from the bottom */
+    left: 50%; /* Align the button to the center */
+    transform: translateX(-50%);
+    
+  }
+  
+  .packages1 .box-container .box {
+    text-align: center;
+    background: #ffffff;
+    -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 1.2rem;
+    position: relative;
+    padding: 10px;
+    border: none;
+    min-height: 50rem;
+  }
+  .packages1 .box-container .box:hover {
+    background: #10221b;
+    color: white;
+  }
+  
+  .packages1 .box-container .box:hover .content > * {
+    color: #fff;
+  }
+  
+  .packages1 .box-container .box:hover .btn {
+    border-color: #fff;
+    
+  }
+  .price{
+    position: absolute;
+  bottom: 70px; /* Adjust this value to set the distance from the bottom */
+  left: 50%; /* Align the button to the center */
+  transform: translateX(-50%);
+  }
+  .Stock{
+    position: absolute;
+  bottom: 3px; /* Adjust this value to set the distance from the bottom */
+  right: 0%; /* Align the button to the center */
+  transform: translateX(-50%);
+  color: red;
+  text-shadow: 2px 2px 5px rgb(255, 0, 0);
+  font-size: smaller;
+
+  }
+  .btn {
+    margin-top: 1rem;
+    display: inline-block;
+    border: 0.2rem solid #bc6bf6;
+    color: black;
+    cursor: pointer;
+    background: none;
+    font-size: 1.7rem;
+    padding: 1rem 3rem;
+    border-radius: 40px;
+  }
+  .btn:hover {
+    background: rgb(238, 238, 238);
+  }
+  
+  .packages1 .box-container .box:hover .btn:hover {
+    color: #bc6bf6;
+  }
+  
+  .packages1 .box-container .box .image {
+    height: 25rem;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+  
+  .packages1 .box-container .box .image img {
+    height: 100%;
+    width: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+  
+  .packages1 .box-container .box .content {
+    padding: 1.5rem;
+    font-size: small;
+  }
+  
+  .packages1 .box-container .box .content h3 {
+    font-size: 2rem;
+    color: #10221b;
+  }
+  
+  
+  .packages1 .box-container .box .content .price {
+    font-size: 1.5rem;
+    color: #bc6bf6;
+  }
+  .packages1 .box-container .box .content .out-of-stock {
+    font-size: 1.5rem;
+    color: red;
+    text-shadow: 0 0 2px rgb(255, 0, 0);
+  }
+
+  .desc{
+    text-align: justify;
+    
+  }
+  @media screen and (max-width: 1200px) {
+    .packages1 .box-container {
+      grid-template-columns: repeat(3, 1fr); /* Three columns on screens around 1200px */
+    }
+  
+    /* Adjustments for individual boxes */
+    .packages1 .box-container .box {
+      margin-bottom: 2rem; /* Add space between boxes */
+      width: 300px; /* Set a minimum width for the card */
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .packages1 .box-container {
+      grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    }
+  
+    /* Adjustments for individual boxes */
+    .packages1 .box-container .box {
+      margin-bottom: 2rem; /* Add some space between boxes */
+      min-width: 300px;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .packages1 .box-container {
+      grid-template-columns: 1fr; /* Only one column on screens up to 450px */
+    }
+  
+    /* Adjustments for individual boxes */
+    .packages1 .box-container .box {
+      margin-bottom: 2rem; /* Add space between boxes */
+      min-width: 300px;
+    }
+  }

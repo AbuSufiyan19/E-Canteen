@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+   
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+		
+		.feeds textarea {
+			height: 155px;
+			width: 85%;
+			border: none;
+			outline: none;
+			background: rgb(255, 255, 255);
+			font-size: 0.95rem;
+			max-height: 200px;
+			resize: none;
+			padding: 16px 15px 16px 0;
+			border: 0.2px solid black;
+		
+		}
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(249, 249, 249);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 25px;
+        }
+		button{
+			color: rgb(236, 245, 237);
+			background: black ;
+			height: 30px;
+		}
+		 <!-- body {
+			color: #000;
+			background: #eaebef;
+			font: 700 16px/1.5 Verdana;
+		}
+		 -->
+		#section-result{
+			border-bottom: 1px solid #999;
+			margin-bottom: 50px;
+			
+		}
+		
+		#section-rating, h1{
+			text-align: center;
+		}
+		
+		
+		.set {
+			display: inline-block;
+			font-size: 3rem;
+			border: none;
+			padding-top: 1rem;
+		}
+		
+		.set:after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+		
+		.star {
+			float: right;
+			padding-left: 15px;
+			cursor: pointer;
+			color: #FFB300;
+			font-size: xx-large;
+		}
+		
+		.star:last-child {
+			padding-left: 0;
+		}
+		
+		.star:hover:before, .star:hover~.star:before, .rd:checked~.star:before {
+			content: "\f005";
+		}
+		
+		.rd {
+			display: none;
+		}
+		
+		.rating {
+			font-size: 0;
+		}
+        .buttonsubmit{
+            color: white;
+            font-size: medium;
+            background-color: rgb(96, 27, 186);
+            padding: 7px;
+            font-weight: bold;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 25px;
+        }
+        .buttonsubmit:hover{
+            color:  rgb(96, 27, 186);
+            background-color: white;
+            font-weight: bold;
+            box-shadow: 0 0 5px 5px  rgb(96, 27, 186);
+        }
+		
+    </style>
+</head>
+<body>
+
+    <button style="display: none;" id="openButton">Open Rating Popup</button>
+
+    <div class="popup-container" id="popupContainer">
+        <div class="popup">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <h2>Your Order placed Successfully<i class="fa fa-check-circle" style="font-size:33px;color:rgb(32, 106, 32)"></i></h2>
+			
+            <p>Your feedback!</p>
+			<div class="feeds"><form id="feedbackForm" action="/submit-feedback" method="POST">
+				<input type="text" name="feedbacktext" style="width: 500px; height: 120px; font-family: monospace; font-size: 14px;" placeholder="Enter your feedback Here..." required>
+			</div>
+	
+            <section id="section-rating">
+                <fieldset class='set'>
+                    <input id="rd5" class="rd" name="rd" type="radio">
+                    <label for="rd5" class="star fa fa-star-o fa-lg"></label>
+
+                    <input id="rd4" class="rd" name="rd" type="radio">
+                    <label for="rd4" class="star fa fa-star-o fa-lg"></label>
+
+                    <input id="rd3" class="rd" name="rd" type="radio">
+                    <label for="rd3" class="star fa fa-star-o fa-lg"></label>
+
+                    <input id="rd2" class="rd" name="rd" type="radio">
+                    <label for="rd2" class="star fa fa-star-o fa-lg"></label>
+
+                    <input id="rd1" class="rd" name="rd" type="radio">
+                    <label for="rd1" class="star fa fa-star-o fa-lg"></label>
+                    
+                    <input type="hidden" id="selectedRatingDisplay" name="starrating" placeholder="Selected Rating" readonly>
+                </fieldset>
+            </section>
+            <input type="submit" value="Submit" class="buttonsubmit"></form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+         function openPopup() {
+            document.getElementById('popupContainer').style.display = 'flex';
+        }
+        window.onload = function() {
+            openPopup(); // Call the openPopup function when the page loads
+            
+        };
+
+        function closePopup() {
+            window.location.href = '/'; 
+        }
+        // Function to update the text box with the selected rating
+function showresult(selectedRating) {
+    
+    document.getElementById('selectedRatingDisplay').value = selectedRating;
+    document.getElementById('selectedfeedDisplay').value = document.getElementById('feedbacktest').value
+}
+
+
+        // Your existing code for handling radio button clicks
+        document.getElementById('rd1').addEventListener('click', function(){
+            showresult(1);
+        });
+
+        document.getElementById('rd2').addEventListener('click', function(){
+            showresult(2);
+        });
+
+        document.getElementById('rd3').addEventListener('click', function(){
+            showresult(3);
+        });
+
+        document.getElementById('rd4').addEventListener('click', function(){
+            showresult(4);
+        });
+
+        document.getElementById('rd5').addEventListener('click', function(){
+            showresult(5);
+        });
+    </script>
+</body>
+</html>

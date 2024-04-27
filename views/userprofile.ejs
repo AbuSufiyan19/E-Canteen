@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Form</title>
+</head>
+<style>
+    body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.container {
+  width: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #8000ff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #8000ff;
+  box-shadow: 0 0 3px 3px #8000ff;
+}
+
+</style>
+<link rel="stylesheet" href="./css/ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<body>
+  <!-- Navigation Bar-->
+  <%- include ('navbar') %>
+  <!-- End of nav bar-->
+  <div class="container">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="<%= user.username %>" readonly>
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile Number:</label>
+        <input type="text" id="mobileno" name="phonenumber" value="<%= user.phonenumber %>">
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="<%= user.email %>">
+      </div>
+      <div class="form-group">
+        <button data-userid="<%= user._id %>" class="btn btn-secondary update-user-btn" type="submit" >
+          Update
+      </button>
+
+
+      </div>
+  </div>
+  <script>
+    const updateButtons = document.querySelectorAll('.update-user-btn');
+updateButtons.forEach(button => {
+    button.addEventListener('click', async (event) => {
+        const userId = event.target.getAttribute('data-userid');
+        const updateduserPhone = document.getElementById('mobileno').value;
+        const updateduserEmail = document.getElementById('email').value;
+        // Prepare the updated product object
+        const updatedUser = {
+          phonenumber: updateduserPhone,
+            email: updateduserEmail
+        };
+
+
+        console.log('Updated product data to send:', updatedUser);
+        try {
+            const response = await fetch(`/updatemyprofile/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message);
+                window.location.href='/';
+            } else {
+                console.error('Failed to update user');
+                alert('Failed to update user');
+            }
+        } catch (error) {
+            console.error('Error updating user:', error);
+        }
+    });
+});
+</script>
+</body>
+</html>

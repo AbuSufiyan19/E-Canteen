@@ -1,0 +1,55 @@
+<header class="header">
+    <a href="/" class="logo"><i class="fas fa-bread-slice"></i>NET CAFE</a>
+    <nav class="navbar">
+        <div id="nav-close" class="fas fa-times"></div>
+        <a href="/cart" id="cart-count" class="fas fa-shopping-cart fa-sm" style="color: #ffffff;">0</a>
+        <a href="/#home">home</a>
+        <a href="/#categories">categories</a>
+        <a href="/#aboutus">about us</a>
+        <a href="/#contactus">contact</a>
+    </nav>
+    <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div> 
+        <div id="search-btn" class="fas fa-search"></div>
+      
+    </div>
+    <nav class="navbar">
+        <h2 id="username"><%= username %></h2>
+      <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<div class="search-form">
+    <div id="close-search" class="fas fa-times"></div>
+    <form action="">
+    <input type="search" name="" placeholder="search here..." id="search-box">
+    <label for="search-box" class="fas fa-search"></label>
+    </form>
+</div>
+<script>
+    // Frontend JavaScript to fetch and update cart count
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // const username = '<%= username %>'; 
+                     
+            // const formattedUsername = encodeURIComponent(username);
+            const response = await fetch('/cart-count');
+            if (response.ok) {
+                const cartCount = await response.json();
+                updateCartCount(cartCount);
+            } else {
+                console.error('Failed to fetch cart count');
+                // Handle error, display default count or retry logic
+            }
+        } catch (error) {
+            console.error('Error fetching cart count:', error);
+        }
+    });
+    
+    function updateCartCount(count) {
+        const cartCountElement = document.getElementById('cart-count');
+        if (cartCountElement) {
+            cartCountElement.textContent = count;
+        }
+    }
+    </script>

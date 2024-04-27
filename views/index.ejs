@@ -1,0 +1,164 @@
+
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./IMG/logo.png">
+    <title>E-CANTEEN</title>
+    <link rel="icon" type="image/x-icon" href="./IMG/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="./css/ui.css">
+</head>
+<body>
+    <!-- Navigation Bar-->
+    <%- include ('navbar') %>
+    <!-- End of nav bar-->
+    <section class="home" id="home">
+   
+        <div class="wrapper">
+           
+                <div class="box" style="background: url(./IMG/fresh-gourmet-meal-beef-taco-salad-plate-generated-by-ai.jpg) no-repeat;">
+                <div class="content">
+                    <span>never stop</span>
+                    <h3>CRAVING</h3>
+                    <p>“You don’t need a silver fork to eat good food.” <br>– Paul Prudhomme</p>
+                    <a href="#category" class="btnn" style="background: #000000; color: white; font-size: medium; border: 3px solid rgb(133, 87, 225); border-radius: 25px; padding: 10px;">Order Now</a>
+                </div>
+                </div>  
+        </div>
+    </section>
+
+    <!-- Category section -->
+
+    <section class="category" id="category">
+
+        <h1 class="heading">categories</h1>
+        
+    
+        <div class="box-container">
+            <% categories.forEach(category => { %>
+            <div class="box">
+                <% if (category.categoryImage && category.categoryImage.data) { %>
+                    <img src="data:<%= category.categoryImage.contentType %>;base64, <%= category.categoryImage.data.toString('base64') %>">
+                  <% } else { %>
+                    <span>No Image Available</span>
+                  <% } %>
+                <h3><%= category.categoryName %></h3>
+                <p><%= category.categoryDescription %></p>
+                <button data-categoryname="<%= category.categoryName %>" class="btn">Explore</button>
+            </div>
+            <% }); %>
+        </div>
+        </button>
+    </section>
+    <section class="packages" id="packages">
+
+        <h1 class="heading">popular menu's</h1>
+    
+        <div class="box-container">
+            <% products.forEach(product => { %>
+                <div class="box">
+                    <div class="image">
+                            <% if (product.productImage && product.productImage.data) { %>
+                              <img src="data:<%= product.productImage.contentType %>;base64, <%= product.productImage.data.toString('base64') %>" width="70" height="70">
+                            <% } else { %>
+                              <span>No Image Available</span>
+                            <% } %>
+                    </div>
+                    <div class="content">
+                        <h3><%= product.productName %></h3>
+                        <p><b>#top seller</b></p>
+                        <p><%= product.productDescription %></p>
+                        <!-- <div class="price">Rs <%= product.productPrice %></div> -->
+                        <button data-categoryname="<%= product.categoryName %>" class="btn" id="packagebtn">Explore</button>
+                    </div>
+                </div>
+            <% }); %>
+            
+    
+        </div>
+    
+    </section>
+    <section class="about" id="about">
+        <div class="abt">
+            <h1>About Us</h1>
+            <p>
+                <p><%= aboutUsContent.content %></p>
+        </div>
+
+    </section>
+    <section class="contact" id="contact">
+    
+        <div class="wrapper1">
+            <div class="title1">
+              <h1>Contact us</h1>
+            </div>
+            <div class="contact-form">
+                <form method = "post" action = "/contact">
+              <div class="input-fields">
+                
+                <input type="text" class="input"  placeholder="Name" name="name" required >
+                <input type="email" class="input"  placeholder="Email Address" name="email" pattern=".+@gmail\.com" required>
+                <input type="phone" class="input"  placeholder="Phone" name="phone" required>
+                <input type="text" class="input"  placeholder="Subject" name="subject" required>
+              </div>
+              <div class="msg">
+                <textarea placeholder="Message" name="message" required></textarea> <br>
+                <div class="btn1"><button type="submit">send <i class="uil uil-message"></i></div>
+              </div>
+              </form>
+            </div>
+            </div> 
+        
+        </section>
+        <section class="footer">
+    
+            <div class="box-container">
+        
+                <div class="box">
+                    <h3>Quick links</h3>
+                    <a href="#home">home</a>    
+                    <a href="#packages">popular menu</a>
+                    <a href="#contact">contact us</a>
+                </div>
+        
+                <div class="box">
+                    <h3>contact info</h3>
+                    <a href="tel:+91 1234567890"> <i class="fas fa-phone"></i> +91 1234567890</a>
+                    <a href="mailto: netcafeadmin@gmail.com"> <i class="fas fa-envelope"></i> netcafeadmin@gmail.com </a>
+                    <a href="#"> <i class="fas fa-map"></i> coimbatore, india - 641910 </a>
+                </div>
+        
+                <div class="box">
+                    <h3>follow us</h3>
+                    <a href="#"> <i class="fab fa-facebook-f"></i> facebook </a>
+                    <a href="#"> <i class="fab fa-instagram"></i> instagram </a>
+                    <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
+                </div>
+            </div>
+            <br><br>
+            <h2 style="text-align: center; color:white;">&copy;2023-Copyright</h2>
+        </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const exploreButtons = document.querySelectorAll('.btn');
+          
+              exploreButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                  const categoryName = this.getAttribute('data-categoryname');
+                //   const username = '<%= username %>'; 
+                  const formattedCategoryName = encodeURIComponent(categoryName); // Ensure the category name is URL-friendly
+                //   const formattedUsername = encodeURIComponent(username);
+                  window.location.href = `/product?categoryName=${formattedCategoryName}`;
+                });
+              });
+            });
+
+          </script>
+    <script src="./js/ui js.js"></script>
+</body>
+</html>
+
+

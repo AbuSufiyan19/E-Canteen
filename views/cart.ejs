@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./IMG/logo.png">
+    <title>E-CANTEEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="./css/cart.css">
+   <link rel="stylesheet" href="./css/ui.css">
+   <script src="./js/ui js.js"></script>
+
+</head>
+<body>
+    <!-- Navigation Bar-->
+   <%- include ('navbar') %>
+    <!-- End of nav bar-->
+<div class="container">
+
+<section class="shopping-cart">
+   <h1 class="heading">Product-Cart</h1>
+   <% if (cartitems.length === 0) { %>
+    <p class="emptycart">Your Cart is Empty<i class="fa fa-spinner fa-pulse fa-fw" style="color: rgb(255, 0, 0);"></i>
+        <span class="sr-only">Loading...</span></p>   
+    
+<% } else { %>
+   <table>
+
+      <thead>
+         <th>Image</th>
+         <th>Name</th>
+         <th>Price</th>
+         <th>Quantity</th>
+         <th>Total price</th>
+         <th>Action</th>
+      </thead>
+
+      <tbody>
+
+        
+
+         <tr><% cartitems.forEach(cart => { %>
+            <td><% if (cart.productImage && cart.productImage.data) { %>
+                <img class="imagebox" src="data:<%= cart.productImage.contentType %>;base64, <%= cart.productImage.data.toString('base64') %>" height="100" width="100">
+              <% } else { %>
+                <span>No Image Available</span>
+              <% } %></td>
+            <td><%= cart.productName %></td>
+            <td>Rs <%= cart.productPrice %></td><form action="" method="post"></form>
+            <td style="max-width: 50px;">
+               
+               <input type="number" name="update_quantity" min="1" value="<%= cart.productQuantity %>" 
+               onchange="updateQuantity('<%= cart._id %>', this.value)">
+
+               </form>                                                                     
+    
+            </td><% let totalPrice = cart.productQuantity * cart.productPrice; %>
+            <td>Rs <%= totalPrice %></td>
+            <td><button data-cartid="<%= cart._id %>" class="delete-btn" type="button">
+                <i class="fas fa-trash"></i> Remove
+            </button></td>
+         </tr><% }) %>     
+         <tr class="table-bottom">
+            <td><a href="/#category" class="option-btn" style="margin-top: 0;">continue shopping</a></td>
+            <td colspan="3">Grand total</td>
+            <td>Rs <%= grandTotal %></td>
+            <td><button class="delete-all-btn" type="button">
+                <i class="fas fa-trash"></i> Delete All
+            </button></td>
+         </tr>
+
+      </tbody>
+
+   </table>
+
+   <div class="checkout-btn">
+      <a href="/checkout" class="btn-checkout">proceed to checkout</a>
+   </div>
+
+   <% } %>
+</section>
+</div>
+<script>
+ function updateQuantity(cartId, newQuantity) {
+        fetch(`/updateCartItem/${cartId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ quantity: newQuantity })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Update successful
+                console.log('Quantity updated successfully');
+                location.reload();
+            } else {
+                // Handle error
+                console.error('Failed to update quantity');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating quantity:', error);
+        });
+    }
+
+ // Assuming you have a button with the class 'delete-btn'
+ const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const cartId = event.target.getAttribute('data-cartid');
+            try {
+                const response = await fetch(`/deletecartproduct/${cartId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    location.reload();
+                    // Optionally, perform additional actions after successful deletion
+                    console.log('product deleted successfully');
+                } else {
+                    console.error('Failed to delete product');
+                    alert('Failed to delete product')
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
+            }
+        });
+    });
+
+
+    document.querySelectorAll('.delete-all-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            deleteAllCartItems();
+        });
+    });
+    
+    function deleteAllCartItems() {
+        fetch('/deleteAllCartItems', {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                // Cart items deleted successfully
+                console.log('All cart items deleted');
+                location.reload();
+                // Optionally, perform any UI update or notification here
+            } else {
+                // Handle error
+                console.error('Failed to delete cart items');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting cart items:', error);
+        });
+    }
+</script>
+</body>
+</html>

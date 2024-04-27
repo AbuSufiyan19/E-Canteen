@@ -1,0 +1,57 @@
+<header class="header">
+    <img style="width: 40px; height: 40px;" src="IMG/logo.png">
+    <a href="/#home" class="logo">E-CANTEEN</a>
+    <!-- <i class="fas fa-bread-slice"></i> -->
+    <nav class="navbar">
+        
+        </div>
+        <div id="nav-close" class="fas fa-times"></div>
+        <a href="/cart" id="cart-count" class="fas fa-shopping-cart fa-sm" style="color: #ffffff;">0</a>
+        <a href="/#home">home</a>
+        <a href="/#category">categories</a>
+        <a href="/#about">about us</a>
+        <a href="/#contact">contact</a>
+        <a href="/myorders">myorders</a>
+        <a href="/myprofile">myprofile</a>
+
+    </nav>
+    <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div> 
+      
+    </div>
+    <nav class="navbar">
+      <h2 id="uname">Hi, <%= username %></h2>
+      <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+
+<script>
+// Frontend JavaScript to fetch and update cart count
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // const username = '<%= username %>'; 
+                 
+        // const formattedUsername = encodeURIComponent(username);
+        const response = await fetch('/cart-count');
+        if (response.ok) {
+            const cartCount = await response.json();
+            updateCartCount(cartCount);
+        } else {
+            console.error('Failed to fetch cart count');
+            // Handle error, display default count or retry logic
+        }
+    } catch (error) {
+        console.error('Error fetching cart count:', error);
+    }
+});
+
+function updateCartCount(count) {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+    }
+}
+
+
+</script> 

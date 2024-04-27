@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./IMG/logo.png">
+    <title>E-CANTEEN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+   <!-- custom css file link  -->
+   <link rel="stylesheet" href="./css/cart.css">
+   <link rel="stylesheet" href="./css/ui.css">
+   <script src="./js/ui js.js"></script>
+
+</head>
+<body>
+    <!-- Navigation Bar-->
+   <%- include ('navbar') %>
+    <!-- End of nav bar-->
+    
+<div class="container">
+
+<section class="shopping-cart">
+   <h1 class="heading">Checkout</h1>
+
+   <table>
+
+      <tbody>
+         <tr class="table-bottom">
+            <th>Name</th>
+            <td><%= users.username %></td>
+         </tr>
+         <tr class="table-bottom">
+            <th>Mobile Number</th>
+           <td><%= users.phonenumber %></td> 
+         </tr>
+         <tr class="table-bottom">
+            <th>Email</th>
+            <td><%= users.email %></td>
+         </tr>
+         <% 
+         // Extracting product names from cartitems
+         const productNames = cartitems.map(cart => `${cart.productName} - ${cart.productQuantity}`);
+         
+         // Joining product names into a string separated by commas
+         const productNamesString = productNames.join(', '); 
+         %>   
+         <tr class="table-bottom">
+            <th>Products</th>
+            <td><%= productNamesString %></td>
+         </tr>
+         <tr class="table-bottom">
+            <th>Total Amount</th>
+            <td>Rs <%= grandTotal %></td>
+         </tr>
+         <form class="pay-form">
+            <input type="hidden" name="name" value="<%= users.username %>">
+            <input type="hidden" name="mobile" value="<%= users.phonenumber %>">
+            <input type="hidden" name="email" value="<%= users.email %>">
+				<input type="hidden" name="productname" value="<%= productNamesString %>">
+				<input type="hidden" name="amount" value="<%= grandTotal %>">
+			
+      </tbody>
+
+   </table>
+   <table>
+   <tr>
+      <div class="checkout-btn">
+         <input type="submit" class="btn-checkout1" value="Pay Now"></form>
+      </div>
+   </tr>
+   </table>
+   
+   
+</section>
+</div>
+
+</body>
+</html>
+<!--Inside index.html -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+$(document).ready(function(){
+	$('.pay-form').submit(function(e){
+		e.preventDefault();
+
+		var formData = $(this).serialize();
+
+		$.ajax({
+			url:"/createOrder",
+			type:"POST",
+			data: formData,
+			success:function(res){
+				if(res.success){
+					var options = {
+						"key": ""+res.key_id+"",
+						"amount": ""+res.amount+"",
+						"currency": "INR",
+						"name": ""+res.product_name+"",
+						"description": ""+res.description+"",
+						"image": "https://dummyimage.com/600x400/000/fff",
+						"order_id": ""+res.order_id+"",
+						"handler": function (response){
+                     $.ajax({
+                                url: "/saveOrderDetails",
+                                type: "POST",
+                                data: {
+                                    orderId: res.order_id, // Send orderId to saveOrderDetails
+                                    // Other data if needed
+                                    mobile: res.contact,
+                                    name: res.name,
+                                    email: res.email,
+                                    productname: res.product_name,
+                                    amount: res.amount
+                                },
+                                success: function(result) {
+                                    // alert("Payment Succeeded. Order details saved!");
+                                    window.location.href = "/feedback"; // Redirect to a success page
+                                },
+                                error: function(error) {
+                                    alert("Failed to save order details. Please contact support.");
+                                    window.location.href = "/checkoutpage"; // Redirect to an error page
+                                }
+                            });
+							// alert("Payment Succeeded");
+							// window.open("/","_self")
+						},
+						"prefill": {
+							"contact":""+res.contact+"",
+							"name": ""+res.name+"",
+							"email": ""+res.email+""
+						},
+						"notes" : {
+							"description":""+res.description+""
+						},
+						"theme": {
+							"color": "#4b0082"
+						}
+					};
+                var razorpayObject = new Razorpay(options);
+					razorpayObject.on('payment.success', function (response){
+                
+					});
+					var razorpayObject = new Razorpay(options);
+					razorpayObject.on('payment.failed', function (response){
+							alert("Payment Failed");
+					});
+					razorpayObject.open();
+				}
+				else{
+					alert(res.msg);
+				}
+			}
+		})
+
+	});
+});
+
+</script>
+
+
