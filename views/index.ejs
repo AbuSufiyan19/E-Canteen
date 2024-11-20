@@ -84,8 +84,11 @@
     <section class="about" id="about">
         <div class="abt">
             <h1>About Us</h1>
-            <p>
-                <p><%= aboutUsContent.content %></p>
+            <% if (aboutUsContent && aboutUsContent.content) { %>
+              <p><%= aboutUsContent.content %></p>
+            <% } else { %>
+                <p>Loading...</p>
+            <% } %>
         </div>
 
     </section>
