@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// const cron = require('node-cron');
-// const Product = require('../models/productModel'); 
 
 const connectDB = async () => {
     try{
